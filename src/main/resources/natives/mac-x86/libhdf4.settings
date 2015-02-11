@@ -1,0 +1,37 @@
+	    SUMMARY OF THE HDF4 CONFIGURATION
+	    =================================
+
+General Information:
+-------------------
+		   HDF4 Version: 4.2.8
+		  Configured on: Fri Aug 10 13:17:58 CDT 2012
+		  Configured by: hdftest@tejeda.hdfgroup.uiuc.edu
+		 Configure mode: production
+		    Host system: i386-apple-darwin10.8.0
+              Uname information: Darwin tejeda.hdfgroup.uiuc.edu 10.8.0 Darwin Kernel Version 10.8.0: Tue Jun  7 16:33:36 PDT 2011; root:xnu-1504.15.3~1/RELEASE_I386 i386
+		      Libraries: 
+	     Installation point: /mnt/scr1/release-binary/hdf4/v4.2.8/builds/tejeda-static
+
+Compiling Options:
+------------------
+               Compilation Mode: production
+                     C compiler: /usr/bin/gcc
+                         CFLAGS:  -ansi  -Wall -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Wmissing-prototypes -Wnested-externs -pedantic -O2
+                       CPPFLAGS: -I/usr/include/rpc  -I/mnt/hdf/packages/zlib-125/static/mac-intel/include -I/mnt/hdf/packages/static/jpeg/mac-intel/include -I/mnt/hdf/packages/szip/static/encoder/mac-intel/include -DSWAP 
+               Shared Libraries: no
+               Static Libraries: yes
+                        LDFLAGS:  -L/mnt/hdf/packages/zlib-125/static/mac-intel/lib -L/mnt/hdf/packages/static/jpeg/mac-intel/lib -L/mnt/hdf/packages/szip/static/encoder/mac-intel/lib
+ 	 	Extra libraries: -lsz -ljpeg -lz 
+ 		       Archiver: ar
+ 		 	 Ranlib: ranlib
+
+Languages:
+----------
+                        Fortran: yes
+               Fortran Compiler: /usr/local/bin/gfortran
+                         FFLAGS:  -O
+
+Features:
+---------
+               SZIP compression: enabled with encoder
+   Support for netCDF API 2.3.2: yes

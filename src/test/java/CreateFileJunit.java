@@ -50,9 +50,9 @@ import ncsa.hdf.utils.SetNatives;
  * @author Jesus R Martinez (jesus@metacell.us)
  *
  */
-public class CreateFile {
+public class CreateFileJunit {
 
-	private static Log _logger = LogFactory.getLog(CreateFile.class);
+	private static Log _logger = LogFactory.getLog(CreateFileJunit.class);
 
 	String fname  = "H5DatasetRead.h5";
 	

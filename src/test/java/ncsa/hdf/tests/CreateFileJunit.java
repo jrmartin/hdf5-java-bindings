@@ -1,3 +1,4 @@
+package ncsa.hdf.tests;
 /*******************************************************************************
  * The MIT License (MIT)
  *
@@ -30,7 +31,8 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-import junit.framework.Assert;
+
+import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,7 +45,6 @@ import ncsa.hdf.object.Group;
 import ncsa.hdf.object.h5.H5File;
 import ncsa.hdf.utils.SetNatives;
 
-
 /**
  * Test functionality to create and read hdf5 file 
  * 
@@ -55,64 +56,66 @@ public class CreateFileJunit {
 	private static Log _logger = LogFactory.getLog(CreateFileJunit.class);
 
 	String fname  = "H5DatasetRead.h5";
-	
+
 	@Test
-	/**
-     * create the file and add groups and dataset into the file, which is the
-     * same as javaExample.H5DatasetCreate
-     * 
-     * @see javaExample.HDF5DatasetCreate
-     * @throws Exception
-     */
-    public void createHDF5File() throws Exception {
-		
+	public void createHDF5File(){
+
 		//User directory is path to store file
 		String path = System.getProperty("user.dir");;
-		
-		SetNatives.getInstance().setHDF5Native(path);
-		
-        long[] dims2D = { 20, 10 };
-        
-        // retrieve an instance of H5File
-        FileFormat fileFormat = FileFormat.getFileFormat(FileFormat.FILE_TYPE_HDF5);
 
-        if (fileFormat == null) {
-            _logger.error("Cannot find HDF5 FileFormat.");
-            return;
-        }
+		try {
+			SetNatives.getInstance().setHDF5Native(path);
 
-        // create a new file with a given file name.
-        H5File testFile = (H5File) fileFormat.createFile(fname, FileFormat.FILE_CREATE_DELETE);
 
-        if (testFile == null) {
-            _logger.error("Failed to create file:" + fname);
-            return;
-        }
+			long[] dims2D = { 20, 10 };
 
-        // open the file and retrieve the root group
-        testFile.open();
-        Group root = (Group) ((javax.swing.tree.DefaultMutableTreeNode) testFile.getRootNode()).getUserObject();
+			// retrieve an instance of H5File
+			FileFormat fileFormat = FileFormat.getFileFormat(FileFormat.FILE_TYPE_HDF5);
 
-        // set the data values
-        int[] dataIn = new int[20 * 10];
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 10; j++) {
-                dataIn[i * 10 + j] = 1000 + i * 100 + j;
-            }
-        }
+			if (fileFormat == null) {
+				_logger.error("Cannot find HDF5 FileFormat.");
+				return;
+			}
 
-        // create 2D 32-bit (4 bytes) integer dataset of 20 by 10
-        Datatype dtype = testFile.createDatatype(Datatype.CLASS_INTEGER, 4, Datatype.NATIVE, Datatype.NATIVE);
-        Dataset dataset = testFile
-                .createScalarDS("2D 32-bit integer 20x10", root, dtype, dims2D, null, null, 0, dataIn);
+			// create a new file with a given file name.
+			H5File testFile = (H5File) fileFormat.createFile(fname, FileFormat.FILE_CREATE_DELETE);
 
-        // close file resource
-        testFile.close();
-        
-        Assert.assertEquals(testFile.exists(), true);
-        
-        readHDF5File();
-    }
+			if (testFile == null) {
+				_logger.error("Failed to create file:" + fname);
+				return;
+			}
+
+			// open the file and retrieve the root group
+			testFile.open();
+			Group root = (Group) ((javax.swing.tree.DefaultMutableTreeNode) testFile.getRootNode()).getUserObject();
+
+			// set the data values
+			int[] dataIn = new int[20 * 10];
+			for (int i = 0; i < 20; i++) {
+				for (int j = 0; j < 10; j++) {
+					dataIn[i * 10 + j] = 1000 + i * 100 + j;
+				}
+			}
+
+			// create 2D 32-bit (4 bytes) integer dataset of 20 by 10
+			Datatype dtype = testFile.createDatatype(Datatype.CLASS_INTEGER, 4, Datatype.NATIVE, Datatype.NATIVE);
+			Dataset dataset = testFile
+					.createScalarDS("2D 32-bit integer 20x10", root, dtype, dims2D, null, null, 0, dataIn);
+
+			// close file resource
+			testFile.close();
+
+			org.junit.Assert.assertEquals(testFile.exists(), true);
+
+			readHDF5File();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	private void readHDF5File() throws Exception {
 		// retrieve an instance of H5File
@@ -126,14 +129,14 @@ public class CreateFileJunit {
         // open the file with read and write access
         FileFormat testFile = fileFormat.createInstance(fname, FileFormat.WRITE);
 
-        Assert.assertNotNull(testFile);
+        org.junit.Assert.assertNotNull(testFile);
 
         if (testFile == null) {
            _logger.error("Failed to open file: " + fname);
             return;
         }
 
-        Assert.assertEquals(testFile.exists(), true);
+        org.junit.Assert.assertEquals(testFile.exists(), true);
 
         // open the file and retrieve the file structure
         testFile.open();
@@ -144,10 +147,10 @@ public class CreateFileJunit {
         Dataset dataset = (Dataset) root.getMemberList().get(0);
         int[] dataRead = (int[]) dataset.read();
 
-        Assert.assertEquals(dataRead.length, 200);
+        org.junit.Assert.assertEquals(dataRead.length, 200);
         
-        Assert.assertEquals(dataRead[0], 1000);
-        Assert.assertEquals(dataRead[1], 1001);
+        org.junit.Assert.assertEquals(dataRead[0], 1000);
+        org.junit.Assert.assertEquals(dataRead[1], 1001);
 
         // change data value and write it to file.
         for (int i = 0; i < 20; i++) {
@@ -160,9 +163,9 @@ public class CreateFileJunit {
         // clean and reload the data value
         int[] dataModified = (int[]) dataset.read();
 
-        Assert.assertEquals(dataModified.length, 200);
-        Assert.assertEquals(dataModified[0], 1001);
-        Assert.assertEquals(dataModified[1], 1002);
+        org.junit.Assert.assertEquals(dataModified.length, 200);
+        org.junit.Assert.assertEquals(dataModified[0], 1001);
+        org.junit.Assert.assertEquals(dataModified[1], 1002);
 
         // close file resource
         testFile.close();

@@ -186,7 +186,7 @@ public class SetNatives {
 	 */
 	private String getLinuxLocation() {
 		String nativeLocation =null;
-		boolean is64bit = (System.getenv("ProgramFiles(x86)") != null);
+		boolean is64bit = (System.getProperty("os.arch").indexOf("64") != -1);
 
 		if(is64bit){
 			nativeLocation = LINUX_64;
@@ -205,7 +205,7 @@ public class SetNatives {
 	 */
 	private String getMacLocation() {
 		String nativeLocation =null;
-		boolean is64bit = (System.getenv("ProgramFiles(x86)") != null);
+		boolean is64bit = (System.getProperty("os.arch").indexOf("64") != -1);
 
 		if(is64bit){
 			nativeLocation = MAC_64;

@@ -1,4 +1,36 @@
-
+/*******************************************************************************
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2011 - 2015 OpenWorm.
+ * http://openworm.org
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the MIT License
+ * which accompanies this distribution, and is available at
+ * http://opensource.org/licenses/MIT
+ *
+ * Contributors:
+ *     	OpenWorm - http://openworm.org/people.html
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+ * USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
+import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,6 +43,7 @@ import ncsa.hdf.object.Group;
 import ncsa.hdf.object.h5.H5File;
 import ncsa.hdf.utils.SetNatives;
 
+
 /**
  * Test functionality to create and read hdf5 file 
  * 
@@ -22,6 +55,7 @@ public class CreateFile {
 	private static Log _logger = LogFactory.getLog(CreateFile.class);
 
 	String fname  = "H5DatasetRead.h5";
+	
 	@Test
 	/**
      * create the file and add groups and dataset into the file, which is the
@@ -30,7 +64,9 @@ public class CreateFile {
      * @see javaExample.HDF5DatasetCreate
      * @throws Exception
      */
-    public void createFile() throws Exception {
+    public void createHDF5File() throws Exception {
+		
+		//User directory is path to store file
 		String path = System.getProperty("user.dir");;
 		
 		SetNatives.getInstance().setHDF5Native(path);
@@ -72,6 +108,10 @@ public class CreateFile {
 
         // close file resource
         testFile.close();
+        
+        Assert.assertEquals(testFile.exists(), true);
+        
+        readHDF5File();
     }
 	
 	private void readHDF5File() throws Exception {
@@ -86,27 +126,28 @@ public class CreateFile {
         // open the file with read and write access
         FileFormat testFile = fileFormat.createInstance(fname, FileFormat.WRITE);
 
+        Assert.assertNotNull(testFile);
+
         if (testFile == null) {
            _logger.error("Failed to open file: " + fname);
             return;
         }
 
+        Assert.assertEquals(testFile.exists(), true);
+
         // open the file and retrieve the file structure
         testFile.open();
+        
         Group root = (Group) ((javax.swing.tree.DefaultMutableTreeNode) testFile.getRootNode()).getUserObject();
 
         // retrieve the dataset "2D 32-bit integer 20x10"
         Dataset dataset = (Dataset) root.getMemberList().get(0);
         int[] dataRead = (int[]) dataset.read();
 
-        // print out the data values
-        _logger.info("\n\nOriginal Data Values");
-        for (int i = 0; i < 20; i++) {
-            _logger.info("\n" + dataRead[i * 10]);
-            for (int j = 1; j < 10; j++) {
-                _logger.info(", " + dataRead[i * 10 + j]);
-            }
-        }
+        Assert.assertEquals(dataRead.length, 200);
+        
+        Assert.assertEquals(dataRead[0], 1000);
+        Assert.assertEquals(dataRead[1], 1001);
 
         // change data value and write it to file.
         for (int i = 0; i < 20; i++) {
@@ -119,17 +160,11 @@ public class CreateFile {
         // clean and reload the data value
         int[] dataModified = (int[]) dataset.read();
 
-        // print out the modified data values
-        _logger.info("\n\nModified Data Values");
-        for (int i = 0; i < 20; i++) {
-            _logger.info("\n" + dataModified[i * 10]);
-            for (int j = 1; j < 10; j++) {
-                System.out.print(", " + dataModified[i * 10 + j]);
-            }
-        }
+        Assert.assertEquals(dataModified.length, 200);
+        Assert.assertEquals(dataModified[0], 1001);
+        Assert.assertEquals(dataModified[1], 1002);
 
         // close file resource
         testFile.close();
 	}
-
 }

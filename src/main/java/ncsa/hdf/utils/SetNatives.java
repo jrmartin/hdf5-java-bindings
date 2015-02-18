@@ -157,6 +157,7 @@ public class SetNatives {
 			nativeLocation = this.getMacLocation();
 		}
 		
+		_logger.info("Native to be used : "+ nativeLocation);
 		return nativeLocation;
 	}
 	

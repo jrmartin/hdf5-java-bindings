@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ncsa.hdf</groupId>
 	<artifactId>object</artifactId>
-	<version>2.10</version>
+	<version>2.12</version>
 	<name>Binding HDF5 and Java</name>
 	<packaging>bundle</packaging>
 	<properties>
@@ -113,9 +113,9 @@
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
 						<Export-Package>
-							ncsa.hdf.hdf5lib, ncsa.hdf.hdf5lib.callbacks,ncsa.hdf.hdf5lib.exceptions,
+							ncsa.hdf.hdf5lib, ncsa.hdf.hdf5lib.exceptions,
 							ncsa.hdf.hdflib, ncsa.hdf.object, ncsa.hdf.object.h5, ncsa.hdf.object.nc2,
-							ncsa.hdf.utils
+							ncsa.hdf.utils, ncsa.hdf.hdf5lib.structs,ncsa.hdf.hdf5lib.callbacks
 						</Export-Package>
 						<Bundle-NativeCode>
 							 natives/linux-x86/libjhdf.so; natives/linux-x86/libjhdf5.so;

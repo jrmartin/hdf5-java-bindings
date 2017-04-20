@@ -112,15 +112,14 @@ public class SetNatives {
 		if(System.getProperty("ncsa.hdf.hdf5lib.H5.hdf5lib")==null){
 			//Get the native location on the resources
 			String nativeLocation = getNativeLocation();
-			
 			//Get name of native file
 			String[] locationSplit = nativeLocation.split("/");
 			String name = "/"+locationSplit[locationSplit.length-1];
-			
+						
 			//create local file at specified location
 			File targetFile = new File(location+name);	
 			targetFile.createNewFile();
-
+			
 			//Get inputstream with native from resources
 			InputStream initialStream = this.getClass().getResourceAsStream(nativeLocation);
 			OutputStream outStream = new FileOutputStream(targetFile);
@@ -168,15 +167,16 @@ public class SetNatives {
 	 */
 	private String getWindowsLocation() {
 		String nativeLocation =null;
-		boolean is64bit = (System.getenv("ProgramFiles(x86)") != null);
+		
+		String arch = System.getenv("PROCESSOR_ARCHITECTURE");
+		String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
 
-		if(is64bit){
+		if(arch != null && arch.endsWith("64")
+				|| wow64Arch != null && wow64Arch.endsWith("64")){
 			nativeLocation = WINDOWS_64;
-		}
-		else{
+		}else{ 
 			nativeLocation = WINDOWS_32;
 		}
-		
 		return nativeLocation;
 	}
 	
@@ -224,7 +224,9 @@ public class SetNatives {
 	 */
 	public boolean isWindowsBasedPlatform()
     {
-        return System.getProperty("os.name").contains("Windows");
+        return System.getProperty("os.name").contains("Windows") || 
+        		System.getProperty("os.name").contains("win32") ||
+        		System.getProperty("os.name").contains("win64");
     }
     
 	/**
